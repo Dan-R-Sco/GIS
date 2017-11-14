@@ -1,12 +1,12 @@
 import arcpy
 
 # Set the workspace
-arcpy.env.workspace = r'C:\Scripts_2016\Dans_Scripts\Connection\SDE@SRV-SQLHA02@CL_DVC.sde'
+arcpy.env.workspace = r'C:\Scripts_2016\XXXX\Connection\XXX@XXXX@XXXX.sde'
 
 # Set a variable for the workspace
 workspace = arcpy.env.workspace
 
-connection = r'C:\Scripts_2016\Dans_Scripts\Connection\SDE@SRV-SQLHA02@CL_DVC.sde'
+connection = r'C:\Scripts_2016\XXXX\Connection\XXX@XXXX@XXXX.sde'
 
 # Block new connections to the database.
 #arcpy.AcceptConnections(connection, False) removed due to not working the accept
