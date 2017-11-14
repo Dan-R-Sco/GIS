@@ -2,7 +2,7 @@
 import arcpy
 
 #set workspace
-arcpy.env.workspace = r"G:\04_ConfidentialData\ConfidentialProjects\ESAA\IC_E200\Data\Manifestation Extraction\Attribute Tables.gdb"
+arcpy.env.workspace = r"G:\XXXX.gdb"
 
 #set up a describe object for each fc in gdb
 fcList = arcpy.ListFeatureClasses()
