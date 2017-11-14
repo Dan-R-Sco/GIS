@@ -1,6 +1,6 @@
 #
-#  author:  ESRI CHILE 
-#  CLIENTE: QPX
+#  author:  XXXX
+#  CLIENTE: XXX
 #
 __doc__ = """ """  
 import os, sys  
