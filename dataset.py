@@ -1,6 +1,6 @@
 import arcpy
 
-arcpy.env.workspace = r"Database Connections\\Daniel@srv-sql03@egdbA.sde"
+arcpy.env.workspace = r"Database Connections\\X@srv-sqlXX@XXX.sde"
 
 fcList = []
 
