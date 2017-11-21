@@ -6,10 +6,10 @@ currentname = arcpy.GetParameterAsText(0) #may need to add quotes to string
 newname = arcpy.GetParameterAsText(1) #may need to add quotes to string
 arcpy.Rename_management(currentname,newname)
 fclist = arcpy.ListFeatureClasses("","",'newname') #may need to add quotes to string
+
 for fc in fclist:
-    print fc
-    fcstripped = fc.lstrip('CL_DVC.OWD.') #strip the prefixe
-    print fcstripped
-    name = "CL_DVC.OWD." + newname + "_" + fcstripped #change directory prefix according to db name and dataset name
-    print name
-    arcpy.Rename_management(fc, name)
+    if fc.endswith("_1"):
+    newname = fc.replace('_1',"")
+    arcpy.Rename_management(fc, newname)
+else:
+    pass
