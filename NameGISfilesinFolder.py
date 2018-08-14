@@ -4,9 +4,10 @@ Created on Wed Apr 18 14:07:13 2018
 
 @author: daniel.scott
 """
+#For vectors
 import arcpy, os, time
-
-workspace = r"G:\08_TiramisuProjects\ICV04"
+#Set directory of where you want the script to run
+workspace = <DIRECTORY>
 files = []
 
 start = time.clock()
@@ -27,7 +28,8 @@ print str(total) + " second to gather only feature classes"
 #### for rasters
 import arcpy, os, time
  
-workspace = r"G:\08_TiramisuProjects\ICV04"
+#Set directory of where you want the script to run
+workspace = <DIRECTORY>
 filesraster = []
 
 start = time.clock()
