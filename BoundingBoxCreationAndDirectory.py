@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Apr 23 14:47:43 2018
-
+Checks raster inside a gdb and creates bounding boxes for them.
+Creates new field in bounding box fc and writes the original fc name as an attribute
 @author: daniel.scott
 """
-#gdb_name = "DKRaster.gdb"
-#ws = r"Q:\08_EXINT\01_KM\02_Projects\Search tool"
-#gdbpath = os.path.join(ws, gdb_name)
+
 import arcpy
 
 file_name_field = 'FNAME'
-input_gdb_or_folder = r'Q:\08_EXINT\01_KM\02_Projects\Search tool\V04_c.gdb'
+##input gdb i.e. r'Q:\test.gdb'
+input_gdb_or_folder = 
 
 arcpy.env.workspace = input_gdb_or_folder
 
@@ -19,6 +19,7 @@ feature_classes = arcpy.ListRasters()
 
 for fc in feature_classes:
     print(fc) # just so you know what the script is processing
+    #Create new fc for each bounding box
     outFeatureClass = "Bounding_" + fc
     try:
         arcpy.MinimumBoundingGeometry_management(fc, outFeatureClass,"RECTANGLE_BY_AREA", "ALL")
