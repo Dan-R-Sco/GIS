@@ -1,7 +1,8 @@
 import arcpy
 
 # set the workspace
-arcpy.env.workspace = 'Database Connections/NDP_Admin@10.70.2.155@NDP_EGDB_20170105.sde'
+## ie db connections\user@server@db
+arcpy.env.workspace = <INPUT db conn>
 
 # set a variable for the workspace
 adminConn = arcpy.env.workspace
