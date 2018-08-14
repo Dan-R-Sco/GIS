@@ -14,11 +14,13 @@ def write_log(text, log):
     f = open(log, 'a')           # 'a' will append to an existing file if it exists
     f.write("{}\n".format(text))  # write the text to the logfile and move to next line
     return
-log = r"Q:\08_EXINT\01_KM\02_Projects\Search tool\rastermovement.txt"
-ws = r"Q:\08_EXINT\01_KM\02_Projects\Search tool"
+#logfile definition
+log = <INSERT LOG>
+ws = <INPUT WORKSPACE>
 gdb_name = "Raster.gdb"
 gdbpath = os.path.join(ws, gdb_name)
-root = r"Q:\08_EXINT\01_KM\02_Projects\Search tool\Pilot\RemoteSensing"
+#define which folder to check
+root = <INSERT FOLDER>
 walk = arcpy.da.Walk(root, topdown=True, datatype=["RasterDataset",'MosaicDataset'])  
 rasterList = []
 errors = []
@@ -53,11 +55,14 @@ def write_log(text, log):
     f = open(log, 'a')           # 'a' will append to an existing file if it exists
     f.write("{}\n".format(text))  # write the text to the logfile and move to next line
     return
-log = r"Q:\08_EXINT\01_KM\02_Projects\Search tool\rastermovement.txt"
-ws = r"Q:\08_EXINT\01_KM\02_Projects\Search tool"
+log = <DEFINE LOG TXT FILE>
+#define ws can be a folder
+ws = <INSERT WORKSPACE>
 gdb_name = "Raster.gdb"
 gdbpath = os.path.join(ws, gdb_name)
-root = r"Q:\08_EXINT\01_KM\02_Projects\Search tool\Pilot\RemoteSensing"
+
+#Define where to search for the rasters
+root = <Folder to search in>
 walk = arcpy.da.Walk(root, topdown=True, datatype=["RasterDataset",'MosaicDataset'])  
 rasterList = []
 errors = []
