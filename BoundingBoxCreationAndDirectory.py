@@ -23,7 +23,10 @@ for fc in feature_classes:
         arcpy.RepairGeometry_management(fc)
     except:
         pass
+    
     print(fc) # just so you know what the script is processing
+    #add message for inside arccatalog
+    arcpy.AddMessage("Creating the output FC {0})".format(newname, fc))
     #Create new fc for each bounding box
     outFeatureClass = "Bounding_" + fc
     try:
