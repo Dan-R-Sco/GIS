@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#Basic script to scan and walk from a path for the files and write to a log
 
 import sys,os
 
@@ -7,8 +8,8 @@ def write_log(text, file):
     f.write("{}\n".format(text))  # write the text to the logfile and move to next line
     return
 
-logfile = r"X:\daniel.scott\V04log2.txt"  # name of my log file
-root = r"G://08_TiramisuProjects//ICV04"
+logfile = <INPUT PATH AND TXT NAME>  # name of my log file
+root = <INPUT THE FOLDER TO SEARCH>
 for path, subdirs, files in os.walk(root):
     print path
     print subdirs
