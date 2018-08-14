@@ -1,3 +1,7 @@
+"""
+This script will create a output txt file of the layers that are in a different spatial reference to the dataframe
+
+"""
 import arcpy
 from arcpy import env
 
@@ -7,9 +11,8 @@ def write_log(text, file):
     f.write("{}\n".format(text))  # write the text to the logfile and move to the next line
     return
 
-
-output = r'X:\daniel.scott\mxd6.txt'
-
+#Define the full log txt file location
+output = <INPUT DIRECTORY>
 mxd = arcpy.mapping.MapDocument("CURRENT")  # Uses your currently open MXD
 df = arcpy.mapping.ListDataFrames(mxd, '')[0]  # Chooses the first dataframe
 
