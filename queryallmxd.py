@@ -1,3 +1,5 @@
+
+
 import arcpy
 
 #Variables to form query syntax
@@ -6,7 +8,7 @@ import arcpy
 field = 'Source'
 queryField = '"%s"' % field.strip()   #add double quotes field (for query syntax)
 #value in specified field
-value = "'Cadastre of ore deposits Antofagasta'"
+value = "'Cadastre of ore deposits'"
 #concatenate query syntax
 queryStr = str(queryField) + "=" + str(value)
 #--------------------------------------------
