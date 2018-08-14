@@ -1,50 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Apr 19 10:25:50 2018
-
+Script that indexes all of the pdf's that are in a folder and writes into txt file
 @author: daniel.scott
 """
-import pdfreader, pyocr
-
-import PyPDF2
-pdfFileObj = open(r'C:\Users\daniel.scott\Desktop\pdf renaming\test\RGCH1994_v21N2pp197_212_Cerro_Iman_1994.pdf, 'rb')
-C:\Users\daniel.scott\Desktop\pdf renaming\test
-
-import os
-from pdfrw import PdfReader
-
-path = r'C:\Users\daniel.scott\Desktop\pdf renaming\test'
-
-
-def renameFileToPDFTitle(path, fileName):
-    fullName = os.path.join(path, fileName)
-    # Extract pdf title from pdf file
-    newName = PdfReader(fullName).Info.Title
-    # Remove surrounding brackets that some pdf titles have
-    newName = newName.strip('()') + '.pdf'
-    newFullName = os.path.join(path, newName)
-    os.rename(fullName, newFullName)
-
-
-for fileName in os.listdir(path):
-    # Rename only pdf files
-    fullName = os.path.join(path, fileName)
-    if (not os.path.isfile(fullName) or fileName[-4:] != '.pdf'):
-        continue
-    renameFileToPDFTitle(path, fileName)
-    
-    
-####to get doc information put in code below
-from PyPDF2 import PdfFileReader
-inputPdf = PdfFileReader(open(r'C:\Users\daniel.scott\Desktop\pdf renaming\test\RGCH1994_v21N2pp197_212_Cerro_Iman_1994.pdf', "rb"))
-docInfo = inputPdf.getDocumentInfo()
-docInfo.author
-docInfo.creator
-docInfo.title
-docInfo.subject
-
-
-
 
 from PyPDF2 import PdfFileReader
 import os,json
@@ -59,7 +18,8 @@ for dirpath, dirnames, files in os.walk(path):
             pdfFiles.append(filename)
 
 pdfFiles.sort(key=str.lower)
-outfile = r"C:\Users\daniel.scott\Desktop\pdf renaming\Index.txt"
+#determine the output txt file
+outfile = <OUTPUTFILE>
 # Loop through all the PDF files.
 for filename in pdfFiles:
     try:
@@ -79,9 +39,47 @@ for filename in pdfFiles:
             json.dump("unable to open " + filename, f, ensure_ascii=False)
         pass
 # TODO: Loop through all the pages (except the 
-inputPdf = PdfFileReader(open(r'C:\Users\daniel.scott\Desktop\pdf renaming\test\RGCH1994_v21N2pp197_212_Cerro_Iman_1994.pdf', "rb"))
+inputPdf = PdfFileReader(open(<DIRECTORY AND FILE>, "rb"))
 docInfo = inputPdf.getDocumentInfo()
 docInfo.author
 docInfo.creator
 docInfo.title
 docInfo.subject
+
+
+
+##another method
+import os
+from pdfrw import PdfReader
+#define patht hat holds the pdfs i.e.r'C:\Dan'
+path = <ENTER PATH>
+
+def renameFileToPDFTitle(path, fileName):
+    fullName = os.path.join(path, fileName)
+    # Extract pdf title from pdf file
+    newName = PdfReader(fullName).Info.Title
+    # Remove surrounding brackets that some pdf titles have
+    newName = newName.strip('()') + '.pdf'
+    newFullName = os.path.join(path, newName)
+    os.rename(fullName, newFullName)
+
+#rename the file to the metadata title
+for fileName in os.listdir(path):
+    # Rename only pdf files
+    fullName = os.path.join(path, fileName)
+    if (not os.path.isfile(fullName) or fileName[-4:] != '.pdf'):
+        continue
+    renameFileToPDFTitle(path, fileName)
+    
+    
+####to get doc information put in code below
+from PyPDF2 import PdfFileReader
+inputPdf = PdfFileReader(open(<DIRECTORY>, "rb"))
+docInfo = inputPdf.getDocumentInfo()
+docInfo.author
+docInfo.creator
+docInfo.title
+docInfo.subject
+
+
+
