@@ -1,10 +1,4 @@
 # -*- #################
-"""
-Created on Thu Apr 12 10:58:14 2018
-
-@author: daniel.scott
-"""
-
 # Author:  ESRI
 # Date:    July 5, 2010
 # Version: ArcGIS 10.0
