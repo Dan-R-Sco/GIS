@@ -8,16 +8,19 @@ import os, arcpy, unidecode, sys
 from openpyxl import load_workbook
 import arcpy_metadata as md
 
-gdb_name = "V04_c.gdb"
+gdb_name = "GDBProject.gdb"
+#workspace something like r"Q:\Search tool"
 ws = r"Q:\08_EXINT\01_KM\02_Projects\Search tool"
 gdbpath = os.path.join(ws, gdb_name)
 
-wb = load_workbook(r'W:\daniel.scott\Search tool\updatedV04Datasources_ScriptRun.xlsx',read_only = False)
+#Input the excel which contains the directory of the files you want to copy i.e. r'C:\Datasources.xlsx'
+wb = load_workbook(r'C:\datasources.xlsx',read_only = False)
 
+#specify the sheet name, below Firstrun is the sheet
 sheet = wb["Firstrun"]
 
 #for row take the metadata
-
+#
 for rowNum in range(5, sheet.max_row):
     datasource = sheet.cell(row=rowNum, column=1).value #directory to file
     print datasource
@@ -45,5 +48,6 @@ for rowNum in range(5, sheet.max_row):
 ###for gdb files
 arcpy.env.workspace = ##path to gdb that holds the files
 for dataset in arcpy.ListDatasets():      
-    for fc in arcpy.ListFeatureClasses("*", "ALL", dataset):  
-        arcpy.FeatureClassToGeodatabase_conversion(fc,r'Q:\08_EXINT\01_KM\02_Projects\Search tool\V04_c.gdb')
+    for fc in arcpy.ListFeatureClasses("*", "ALL", dataset):
+        gdb_tomove = r'C:\GDB.gdb'
+        arcpy.FeatureClassToGeodatabase_conversion(fc, gdb_tomove)
