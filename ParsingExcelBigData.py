@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Apr 20 11:03:06 2018
-
+Script that will read a excel to a defined sheet and write tags (key words) next to the directory column
 @author: daniel.scott
 """
 
 from openpyxl import load_workbook
+##input excel document
+wb = load_workbook(<INPUT EXCEL>,read_only = False)
 
-wb = load_workbook(r'W:\daniel.scott\Search tool\updatedV04Datasources_ScriptRun1.xlsx',read_only = False)
+#set key words that (list headers) and the words that could mean them (lists contents)  
 geology = ["cover","lithology", "rock","age","litho", "geol", "geology","drill","thin","fault", "strk","min", "vein","struct","hsdec","handsample","lito","geochron","alt","halo","section", "seccion","lith"]
 geochemistry = ["geochem", "mems","geochemistry", "geoch","gch", "asd","alter","ger","sampling","assaying","xrf","greenrock","fertility"]
 geophysics = ["geophy", "mag", "geop","ip","seis","grav","radiome"]
@@ -57,4 +59,5 @@ for rowNum in range(5, sheet.max_row):
     except:
         print "unable to process" + str(rowNum)                                                                                                                                                              
 
-wb.save(r'W:/daniel.scott/Search tool/updatedV04Datasources_ScriptRunMaster.xlsx')
+        #define where to save the xls thats been edited
+wb.save(<INPUT EXCEL DIRECTORY AND FILE NAME WITH EXTENSION>)
