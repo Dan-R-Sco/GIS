@@ -10,7 +10,7 @@ import arcpy_metadata as md
 
 gdb_name = "GDBProject.gdb"
 #workspace something like r"Q:\Search tool"
-ws = r"Q:\08_EXINT\01_KM\02_Projects\Search tool"
+ws = r"Q:\<INSERT DIRECTORY>"
 gdbpath = os.path.join(ws, gdb_name)
 
 #Input the excel which contains the directory of the files you want to copy i.e. r'C:\Datasources.xlsx'
