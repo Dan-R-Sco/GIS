@@ -7,7 +7,8 @@ Created on Wed Apr 11 14:58:06 2018
 
 import arcpy, sys, os
 
-arcpy.env.workspace =  r'Q:\08_EXINT\01_KM\02_Projects\Search tool\V04.gdb'
+#define the gdb
+arcpy.env.workspace =  <DIRECTORY TO THE GDB INCLUDING THE GDB EXTENSION>
 fcs = arcpy.ListFeatureClasses()
 arcpy.AddMessage("Listing FCs in dataset: ")
 for fc in fcs:
@@ -19,6 +20,7 @@ for fc in fcs:
     if fc.startswith("V04"):
         pass
     else:
+        #Define prefix wanted below
         newname = "V04_" + fc
         arcpy.AddMessage("Renaming fc {0} to {1})".format(fc,newname))
         arcpy.Rename_management(fc,newname)
