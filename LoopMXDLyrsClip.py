@@ -9,18 +9,22 @@ def write_log(text, file):
     f = open(log, 'a')           # 'a' will append to an existing file if it exists
     f.write("{}\n".format(text))  # write the text to the logfile and move to next line
     return
- 
-mxd = arcpy.mapping.MapDocument(r"G:\08_TiramisuProjects\W1612\Workspace\Consolidated GIS\TGTA_W1612_ConsolidatedGISPhase3_30Apr2018.mxd")
+
+#Specify the map document
+mxd = arcpy.mapping.MapDocument(<INSERT MAP DOCUMENT>")
 df = arcpy.mapping.ListDataFrames(mxd)
+#Specify the log file
+log = r"G:\<LOG FILE>" 
 
-log = r"G:\08_TiramisuProjects\W1612\Workspace\Vectors.txt" 
-
-ws = r"G:\08_TiramisuProjects\W1612\Workspace"
-
+#input workspace of where you are taking files 
+ws = r"<WORKSPACE>"
+                                
+#GDB that you want to transfer files to
 gdb_name = r"RG_HandoverVectors2.gdb"
 gdbpath = os.path.join(ws, gdb_name)
 
-clip_feature = r"G:\08_TiramisuProjects\W1612\Script\Phase_1_GeologicalSetting\1.2_DomainsGeneration\1.2.1_Domains Definition\B2a_B2b_Areas_ForRG.shp"
+#What is the clip area to be used?
+clip_feature = <CLIP SHAPEFILE>
 for d in df:
     layers = arcpy.mapping.ListLayers(mxd, "", d)
      # map layers 
