@@ -1,3 +1,5 @@
+#Script that will print layers that do not have spatial reference defined in a map document
+#
 import arcpy
 from arcpy import env
 
