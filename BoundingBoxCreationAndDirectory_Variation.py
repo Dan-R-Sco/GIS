@@ -6,8 +6,11 @@ be careful that this inputs the infolder hardcoded and out folder
 @author: daniel.scott
 """
 import arcpy
-infolder = r'Q:\08_EXINT\01_KM\02_Projects\Search tool\Raster.gdb'
-out = r'Q:\08_EXINT\01_KM\02_Projects\Search tool\RasterBound.gdb'
+#input folder details r'Q:\Raster.gdb'
+infolder = 
+#where do you want the bounding boxes to be deposited
+#r'Q:\RasterBound.gdb'
+out = 
 arcpy.env.workspace = infolder
 rasters = arcpy.ListRasters("*")
 
