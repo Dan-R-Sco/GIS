@@ -12,11 +12,14 @@ def write_log(text, file):
 
 mxd = arcpy.mapping.MapDocument(r"G:\08_TiramisuProjects\W1612\Workspace\Consolidated GIS\TGTA_W1612_ConsolidatedGISPhase3_30Apr2018.mxd")
 df = arcpy.mapping.ListDataFrames(mxd)
- 
-log = r"G:\08_TiramisuProjects\W1612\Workspace\Rasters.txt" 
 
-ws = r"G:\08_TiramisuProjects\W1612\Workspace"
+#logfile
+log = <INSERT LOGFILE> 
+
+#Define workspace
+ws = <INSERT WORKSPACE>
  
+#define gdb to move data in
 gdb_name = r"RG_handoverRastersDS.gdb"
 gdbpath = os.path.join(ws, gdb_name)
 rasterList = []
