@@ -18,6 +18,11 @@ arcpy.env.workspace = input_gdb_or_folder
 feature_classes = arcpy.ListRasters()
 
 for fc in feature_classes:
+    ##Ensure that the raster file is not corrupt
+    try:
+        arcpy.RepairGeometry_management(fc)
+    except:
+        pass
     print(fc) # just so you know what the script is processing
     #Create new fc for each bounding box
     outFeatureClass = "Bounding_" + fc
