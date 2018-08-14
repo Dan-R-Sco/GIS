@@ -1,114 +1,15 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Apr 13 14:55:47 2018
-Metadata to GIS files
+Reads an excel file and checks the directory to see if inside it has any keywords that we can associate to metadata categories and writes this to the next column
+Then it tries to assign this keyword to the file
 @author: daniel.scott
 """
+
 from openpyxl import load_workbook
-import arcpy_metadata as md
-import glob, os
 
-wb = load_workbook(r'W:/daniel.scott/Search tool/updatedV04Datasources_ScriptRun.xlsx',read_only = False)
-sheet = wb["alltags"]
-
-notags = []
-#cycle through each row
-for rowNum in range(2, sheet.max_row):
-    if sheet.cell(row = rowNum, column = 3).value is None:
-        notags.append(sheet.cell(row = rowNum, column = 2).value)
-        pass
-    else:
-        print sheet.cell(row = rowNum, column = 3).value
-        fileloc = glob.glob(sheet.cell(row = rowNum, column = 2).value)
-#locate file
-        try:
-            metadata = md.MetadataEditor(fileloc)
-            #add project tag
-            metadata.tags = ["V04"]
-            tagdirvalue = sheet.cell(row = rowNum, column = 3).value
-            print "row number: " + rowNum + ", tag value: " + tagdirvalue  
-            #add directory tag
-            metadata.tags.append(tagdirvalue)
-            print "added metadata from directory for: " + "'" + "'" + tagdirvalue + " added to " + fileloc     
-        except:
-            print "unable to add tag to " + fileloc
-        try:
-            tagmxdvalue = sheet.cell(row = rowNum, column = 4).value
-            print "row number: " + rowNum + ", tag value: " + tagmxdvalue  
-            #add tag of dicipline if available
-            if tagmxdvalue is not None:
-                metadata.tags.append(tagmxdvalue)
-                print "added metadata from mxd grouping " + "'" + "'" + tagmxdvalue + " added to " + fileloc
-            else:
-                pass
-        except:
-            print "unable to add tag to " + fileloc
-metadata.finish()  # save() and cleanup() as one call
-
-"""
-some commands that can be used in md editor
-metadata = md.MetadataEditor(path_to_fc)
-
-title = metadata.title
-metadata.title = "The new title"
-#Get list items (returns list)
-tags = metadata.tags
-for tag in tags:
-    print tag
-#Change list items
-metadata.tags = ["V04", "tag2"]
-metadata.tags[1] = "another tag"
-metadata.tags.append("new tag")
-metadata.tags.remove("V04")
-metadata.tags.pop()
-#Get numeric items (return int or float)
-
-min_scale = metadata.min_scale
-max_scale = metadata.max_scale
-#Change numeric items
-
-metadata.min_scale = 500000
-metadata.max_scale = 500
-
-#Saving the changes back to the file
-metadata.save() # save the metadata back to file.
-metadata.cleanup() # remove all temporary files.
-metadata.finish()  # save() and cleanup() as one call
-"""
-from openpyxl import load_workbook
-wb = load_workbook(r'W:/daniel.scott/Search tool/V04 data sources (version 1).xlsb.xlsx')
-sheet = wb["Sheet5"]
-geology = ["lithology", "litho", "geol", "geology"]
-geochemistry = ["geochem", "MEM","geochemistry"]
-for rowNum in range(2, sheet.max_row):
-    directory ="source directory: " + sheet.cell(row=rowNum, column=2).value
-    mxdlyr = "mxd lyr name: "+ sheet.cell(row=rowNum, column=1).value
-    print directory 
-    print mxdlyr
-    if any(geology) in mxdlyr or directory:
-        sheet.cell(row = rowNum,column=3).value = "Geology"
-    if any(geochemistry) in mxdlyr or directory:
-        sheet.cell(row = rowNum,column=3).value = "Geochemistry"
-        
-for rowNum in range(2, sheet.max_row):
-    directory ="source directory: " + sheet.cell(row=rowNum, column=2).value
-    mxdlyr = "mxd lyr name: "+ sheet.cell(row=rowNum, column=1).value
-    print directory 
-    print mxdlyr
-    if any(geology) in mxdlyr:
-        sheet.cell(row = rowNum,column=3).value = "Geology"
-    if any(geochemistry) in mxdlyr or directory:
-        sheet.cell(row = rowNum,column=3).value = "Geochemistry"
-    if any(geology) in directory:
-        sheet.cell(row = rowNum,column=3).value = "Geology"
-    if any(geochemistry) in directory:
-        sheet.cell(row = rowNum,column=3).value = "Geochemistry"
-        
-        
-"""
-
-"""
-wb = load_workbook(r'W:\daniel.scott\Search tool\updatedV04Datasources_ScriptRun1.xlsx',read_only = False)
+#Add workbook i.e. r'C:\Docs\tool\Datasources_Script.xlsx'
+wb = load_workbook(<WORKSBOOK DIRECTORY AND NAME>,read_only = False)
 geology = ["cover","lithology", "rock","drill","Age","litho", "geol", "geology","drill","thin","fault", "strk","Min", "vein","struct","HSDec","handsample","lito","geochron","alt","halo","section", "seccion"]
 geochemistry = ["geochem", "MEM","geochemistry", "geoch","gch", "ASD","alter","GER"]
 geophysics = ["geophy", "mag", "geop",""]
@@ -186,4 +87,81 @@ for rowNum in range(2, sheet.max_row):
 
 print datasource + " copied to EGDB as " + name 
 arcpy_metadata.metadata.finish()  # save() and cleanup() as one call
-wb.save(r'W:/daniel.scott/Search tool/updatedV04Datasources_ScriptRunMaster.xlsx')
+#save the xls after writing to it
+wb.save(<DIRECTORY AND XLS NAME>)
+
+"""
+some commands that can be used in md editor
+metadata = md.MetadataEditor(path_to_fc)
+
+title = metadata.title
+metadata.title = "The new title"
+#Get list items (returns list)
+tags = metadata.tags
+for tag in tags:
+    print tag
+#Change list items
+metadata.tags = ["V04", "tag2"]
+metadata.tags[1] = "another tag"
+metadata.tags.append("new tag")
+metadata.tags.remove("V04")
+metadata.tags.pop()
+#Get numeric items (return int or float)
+
+min_scale = metadata.min_scale
+max_scale = metadata.max_scale
+#Change numeric items
+
+metadata.min_scale = 500000
+metadata.max_scale = 500
+
+#Saving the changes back to the file
+metadata.save() # save the metadata back to file.
+metadata.cleanup() # remove all temporary files.
+metadata.finish()  # save() and cleanup() as one call
+"""
+
+"""
+#olderscript
+from openpyxl import load_workbook
+import arcpy_metadata as md
+import glob, os
+
+#read the xls workbook
+wb = load_workbook(<XLS FILE AND DIRECTORY>,read_only = False)
+#define the sheet to read
+sheet = wb["alltags"]
+
+notags = []
+#cycle through each row
+for rowNum in range(2, sheet.max_row):
+    if sheet.cell(row = rowNum, column = 3).value is None:
+        notags.append(sheet.cell(row = rowNum, column = 2).value)
+        pass
+    else:
+        print sheet.cell(row = rowNum, column = 3).value
+        fileloc = glob.glob(sheet.cell(row = rowNum, column = 2).value)
+#locate file
+        try:
+            metadata = md.MetadataEditor(fileloc)
+            #add project tag
+            metadata.tags = ["V04"]
+            tagdirvalue = sheet.cell(row = rowNum, column = 3).value
+            print "row number: " + rowNum + ", tag value: " + tagdirvalue  
+            #add directory tag
+            metadata.tags.append(tagdirvalue)
+            print "added metadata from directory for: " + "'" + "'" + tagdirvalue + " added to " + fileloc     
+        except:
+            print "unable to add tag to " + fileloc
+        try:
+            tagmxdvalue = sheet.cell(row = rowNum, column = 4).value
+            print "row number: " + rowNum + ", tag value: " + tagmxdvalue  
+            #add tag of dicipline if available
+            if tagmxdvalue is not None:
+                metadata.tags.append(tagmxdvalue)
+                print "added metadata from mxd grouping " + "'" + "'" + tagmxdvalue + " added to " + fileloc
+            else:
+                pass
+        except:
+            print "unable to add tag to " + fileloc
+metadata.finish()  # save() and cleanup() as one call
