@@ -7,7 +7,8 @@ def write_log(text,file):
     f.write("{}\n".format(text)) #write the text to the logfile and move to the next line
     return
 
-output = r'X:\daniel.scott\V04.txt' #arcpy.GetParameterAsText(0)
+#define output log file
+output = <OUTPUT LOG FILE> #arcpy.GetParameterAsText(0)
 
 mxd = arcpy.mapping.MapDocument("CURRENT")
 df = arcpy.mapping.ListDataFrames(mxd)
