@@ -1,0 +1,60 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Oct  1 14:16:23 2018
+Reads xls file which contains script errors
+Provides summary stats and histogram graphs
+@author: daniel.scott
+"""
+
+import pandas as pd
+file_loc = r'C:\ .xls'
+
+df = pd.read_excel(file_loc)
+
+df.head()
+
+df.columns
+
+df.shape[0]
+
+#replace column header that have a space with underscore
+df = df.rename(columns=lambda x: x.strip().replace(' ','_'))
+
+df = df[df.Script_Message != 5]
+
+#count number of errors
+df.Script_Message.str.contains(r'ERROR').sum()
+
+# 244
+
+errors = df[df.Script_Message.str.contains(r'ERROR', na= False)]
+
+#groupby split string and extract G:\02_ProjectsCoastalBelt until next backslash
+
+errors['Message'] = df.Script_Message.str.split('Dataset ', expand = True)[0]
+errors['Directory'] = df.Script_Message.str.split('Dataset ', expand = True)[1]
+
+errors['BaseName'] = errors.Directory.str.split('\\', 2, expand = True)[1]
+
+#show different error messages
+errors.Message.unique()
+
+#count different messages
+len(errors['Message'].unique().tolist())
+
+#count unique values in each column
+errors.nunique()
+
+import matplotlib.pyplot as plt
+
+#plot numbers
+errors.Message.value_counts().plot(kind='bar')
+
+errors.BaseName.value_counts().plot(kind='bar')
+
+#review non error data
+completed = df[df.Script_Message.str.contains('ERROR') == False]
+
+completed['BaseName'] = completed.Script_Message.str.split('\\', 2, expand = True)[1]
+completed.BaseName.value_counts().plot(kind='bar')
+
