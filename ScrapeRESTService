@@ -12,7 +12,8 @@ arcpy.env.overwriteOutput = True
 #baseurl to scrap
 baseURL = "http://portalgeomin.sernageomin.cl:6080/arcgis/rest/services/Yacimiento_Mineria_Abierta/MapServer/0"
 fields = "*"
-outdata = r'C:\Users\daniel.scott\Documents\ArcGIS\Test.gdb\testdata'
+##gdb location\fc
+outdata = r'C:\Users\Test.gdb\testdata'
 
 # Get record extract limit
 urlstring = baseURL + "?f=json"
