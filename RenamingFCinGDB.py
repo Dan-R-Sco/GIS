@@ -29,7 +29,7 @@ for fc in fcs:
 import arcpy, sys, os
 
  #define the gdb
-arcpy.env.workspace = <database connection>
+arcpy.env.workspace = <database connection including dataset path>
 fcs = arcpy.ListFeatureClasses()
 arcpy.AddMessage("Listing FCs in dataset: ")
 for fc in fcs:
