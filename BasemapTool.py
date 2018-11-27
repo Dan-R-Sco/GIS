@@ -2,7 +2,11 @@
 """
 Created on Wed Nov 14 10:06:21 2018
 Packaging base map extractor into arcGIS tool
-User needs to input dest folder and 
+
+Needs to be used inside the mxd which you are extracting data
+
+User needs to input dest folder
+
 @author: daniel.scott
 """
 
