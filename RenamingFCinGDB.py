@@ -25,3 +25,13 @@ for fc in fcs:
         arcpy.AddMessage("Renaming fc {0} to {1})".format(fc,newname))
         arcpy.Rename_management(fc,newname)
 
+###For those inside a dataset
+import arcpy, sys, os
+
+ #define the gdb
+arcpy.env.workspace = <database connection>
+fcs = arcpy.ListFeatureClasses()
+arcpy.AddMessage("Listing FCs in dataset: ")
+for fc in fcs:
+    newname = fc.replace(<DB.USER.>,"DB.USER.ProjName_")
+    arcpy.Rename_management(fc,newname)
