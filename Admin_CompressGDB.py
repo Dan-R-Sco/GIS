@@ -1,8 +1,14 @@
 # ===================   ========  =======================================================================================  ==========
 # EGDB maintenance script
 # Author: Daniel Scott
-# one script to rule them all
-
+# one script to rule them all, reconciles versioning, indexes database, analyses database, compresses database and writes log to txt file
+# Inputs:
+# - Workspace
+# - SDE connection
+# - log file
+# - reconcile log
+# - dataowner_connection
+# 
 # ===================   ========  =======================================================================================  ==========
 
 import arcpy, time, os, sys, csv, string
