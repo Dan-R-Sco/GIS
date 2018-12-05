@@ -1,3 +1,8 @@
+# A script to list list all fcs in all datasets in db
+# Inputs:
+# - workspace
+# 
+
 import arcpy
 
 arcpy.env.workspace = r"Database Connections\\X@srv-sqlXX@XXX.sde"
