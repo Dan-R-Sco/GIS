@@ -2,7 +2,12 @@
 """
 Created on Thu May 24 15:11:54 2018
 brkn layer list creation to desktop as txt file, run in mxd
-need to add question would you like to remove those broken links?
+improvement: need to add question would you like to remove those broken links?
+
+Inputs:
+-Current MXD
+-Writes to desktop
+
 @author: daniel.scott
 """
 
