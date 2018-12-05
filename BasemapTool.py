@@ -5,7 +5,9 @@ Packaging base map extractor into arcGIS tool
 
 Needs to be used inside the mxd which you are extracting data
 
-User needs to input dest folder
+Inputs:
+-fishnetLayer (called "fishnet")
+-output dest folder
 
 @author: daniel.scott
 """
