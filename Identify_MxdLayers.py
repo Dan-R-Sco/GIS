@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed May 23 14:27:35 2018
+
 Listing layers in mxd
+
+inputs:
+ - Current mxd
 @author: daniel.scott
 """
 import os, arcpy
