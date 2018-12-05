@@ -2,6 +2,12 @@
 """
 Created on Thu May 24 15:46:31 2018
 identify duplicate layer names in mxd
+
+Inputs:
+-Current mxd
+
+Outputs:
+print in python module duplicate layer names
 @author: daniel.scott
 """
 import arcpy
