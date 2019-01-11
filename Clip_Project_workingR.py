@@ -15,18 +15,21 @@ approx running time 10s per vector lyr
 
 -check if rasters works and find out how to get mxd entry to work, adding r' before the mapdoc input?
 
-23/11/18 worked fully on orion. The get number of selection doesnt work, need to run a cleaning script afterwards
+23/11/18 worked fully on project. The get number of selection doesnt work, need to run a cleaning script afterwards
+
+11/01/19 - added "No_maintain_extent" to speed up process time
 @author: daniel.scott
 """
 
 import os, arcpy, kitchen
+
 mapdoc= arcpy.GetParameterAsText(0)
 mxd = arcpy.mapping.MapDocument(mapdoc)
 df = arcpy.mapping.ListDataFrames(mxd)
 ws = arcpy.GetParameterAsText(1)
 clip_feature = arcpy.GetParameterAsText(2)
 
-#C:\Users\daniel.scott\Documents\ArcGIS
+#C:\Users\Documents\ArcGIS
 #newmxd = arcpy.GetParameterAsText(3)
 
 good_cnt = 0 
@@ -37,6 +40,8 @@ empty_lst = []
 good_cntR = 0
 bad_cntR = 0
 bad_lstR = []
+empty_cntR = 0
+empty_lstR = []
 
 for lyr in arcpy.mapping.ListLayers(mxd, ""):
     longname = lyr.longName
@@ -58,8 +63,19 @@ for lyr in arcpy.mapping.ListLayers(mxd, ""):
                 #clip layer and save to gdb
                 # Replace a layer/table view name with a path to a dataset (which can be a layer file) or create the layer/table view within the script
                 ## Replace a layer/table view name with a path to a dataset (which can be a layer file) or create the layer/table view within the script
-                arcpy.Clip_management(lyr,rectangle='#',out_raster=out_feature, in_template_dataset = clip_feature)
-                good_cntR = good_cntR + 1
+                try:
+                    arcpy.Clip_management(lyr,rectangle='#',out_raster=out_feature, in_template_dataset = clip_feature, clipping_geometry="ClippingGeometry", maintain_clipping_extent="NO_MAINTAIN_EXTENT")
+                    # Replace a layer/table view name with a path to a dataset (which can be a layer file) or create the layer/table view within the script
+                    #arcpy.Clip_management(in_raster="Carta_Cabeza_de_Vaca", rectangle="399357.2327 6955085.3947 405478.4117 6962097.7281", out_raster="W:/arcgis/Clip Example/demo.gdb/carta_vaca_2", in_template_dataset="Script_Phase_2_Re_Delineation_proposals__Orion_area", nodata_value="256", clipping_geometry="ClippingGeometry", maintain_clipping_extent="NO_MAINTAIN_EXTENT")
+                    good_cntR = good_cntR + 1
+                except arcpy.ExecutionError as e:
+                    if 'Error 001566' in str(e):
+                        empty_cntR += 1
+                        empty_lstR.append(rname)
+                    else: 
+                        bad_lstR.append(rname) 
+                        bad_cntR  = bad_cntR + 1
+                        pass
             except:
                 bad_lstR.append(rname) 
                 bad_cntR  = bad_cntR + 1
@@ -97,7 +113,7 @@ for lyr in arcpy.mapping.ListLayers(mxd, ""):
                                 out_feature = os.path.join(ws, lname)
                                 #clip layer and save to gdb
                                 print(arcpy.AddMessage("lyr is {0}, clip feat is {1} out feat is {2}".format(lyr, clip_feature, out_feature)))
-                                #arcpy.Clip_analysis(in_features="General\south_border", clip_features="W:/daniel.scott/arcgis/Clip Example/clip_smallTest.gdb/Clip", out_feature_class="W:/daniel.scott/arcgis/Clip Example/clip_smallTest.gdb/cliptest", cluster_tolerance="")
+                                #arcpy.Clip_analysis(in_features="General\south_border", clip_features="W:/arcgis/Clip Example/clip_smallTest.gdb/Clip", out_feature_class="W:/arcgis/Clip Example/clip_smallTest.gdb/cliptest", cluster_tolerance="")
                                 lyrpath = lyr.dataSource
                                 clippath = os.path.abspath(clip_feature)
                                 arcpy.Clip_analysis(lyr, clip_feature, out_feature)
@@ -121,6 +137,8 @@ arcpy.AddMessage("List of features unable to clip: ")
 arcpy.AddMessage('\n'.join([feature for feature in bad_lst]))
 
 arcpy.AddMessage("Successfully clipped {0} Rasters".format(str(good_cntR)))
+arcpy.AddMessage("{0} features had no data inside the clip area".format(str(empty_cntR)))
+
 arcpy.AddMessage("Could not clip {0} Rasters".format(str(bad_cntR)))
 arcpy.AddMessage("List of Rasters unable to clip: ")
 arcpy.AddMessage( '\n'.join([feature for feature in bad_lstR]))
