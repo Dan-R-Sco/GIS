@@ -1,0 +1,55 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jan 17 10:50:35 2019
+Directory scraping script which will search through the given directory and scan any files which can be considered a raster via arcpy
+The scan results are then dumped into an excel via pandas
+
+The scrape has the following attributes:
+        
+        folder directory: 
+        
+        output file: r'directory\file.xls'
+    
+
+@author: daniel.scott
+
+"""
+
+import os, arcpy
+import pandas as pd
+
+#set workspace
+workspace = r'C:\Dan'
+arcpy.env.workspace = workspace  
+  
+  
+# Set environment settings  
+arcpy.env.overwriteOutput = True  
+    
+
+def crawl(folder, outputfile):
+    
+    #set the walk variable to only look for raster data, and where to look
+    walk = arcpy.da.Walk(folder, topdown = True, datatype =['MosaicDataset', 'RasterDataset','RasterCatalog','Tin']) 
+    
+    #create list which will collect the information from the scan
+    data = list()
+    
+    for root, dirs, files in walk:
+        #collect the full path
+        fullpath = os.path.join(os.path.abspath(root))
+        for f in files:
+            #encode and decode which removes any ascii characters
+            f = f.encode('ascii', 'ignore').decode('ascii')
+            fullpath = fullpath.encode('ascii', 'ignore').decode('ascii')
+            #append results into the data list
+            data.append((f, fullpath))
+    #set the pd.dataframe structure
+    df1 = pd.DataFrame(data, columns=['filename', 'fullpath']) 
+    writer = pd.ExcelWriter(outputfile)
+    #dump into excel
+    df1.to_excel(writer, sheet_name='Sheet1')   
+    writer.save()
+
+#then in use you can set something like this
+crawl(r'C:\dan',r'C:\dan\test.xls')
