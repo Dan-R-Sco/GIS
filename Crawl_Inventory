@@ -2,7 +2,7 @@
 """
 Created on Thu Jan 17 10:50:35 2019
 Directory scraping script which will search through the given directory and scan any files which can be considered a raster via arcpy
-The scan results are then dumped into an excel via pandas
+The scan results are then dumped into an new excel via pandas
 
 The scrape has the following attributes:
         
@@ -51,5 +51,5 @@ def crawl(folder, outputfile):
     df1.to_excel(writer, sheet_name='Sheet1')   
     writer.save()
 
-#then in use you can set something like this
+#then in use you can set something like this, creates new xls if one doesnt exist
 crawl(r'C:\dan',r'C:\dan\test.xls')
