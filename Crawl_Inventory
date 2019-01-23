@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jan 17 10:50:35 2019
-Directory scraping script which will search through the given directory and scan any files which can be considered a raster via arcpy
-The scan results are then dumped into an new excel via pandas
+Directory scraping script which will search through the given directory and scan any files (alter the datatype in line 37) this is using arcpy and restricted to arc data types(rasters, shp etc) 
+The script, catalogs the files and extracts metadata related to its creation date and last modified dates - data inside gdb get catalogued but not extracting the metadata. The scan results are then dumped into an excel via pandas
 
 The scrape has the following attributes:
         
@@ -11,15 +11,19 @@ The scrape has the following attributes:
         output file: r'directory\file.xls'
     
 
+Note: Possible to have created_date < mod_date
+     - when you copy a file into different directories, the original "created date" becomes overwritten by the date that you copy the data to that directory
+     - This results in a untouched modified date and the "creation_date" reflecting the copy date
+     
+     Made for use on windows. In linux the getmtime function has some issues
 @author: daniel.scott
 
 """
 
-import os, arcpy
+import os, arcpy, time, datetime
 import pandas as pd
-
-#set workspace
-workspace = r'C:\Dan'
+#need a arcpy environment to work in
+workspace = r'W:\daniel.scott'
 arcpy.env.workspace = workspace  
   
   
@@ -35,21 +39,42 @@ def crawl(folder, outputfile):
     #create list which will collect the information from the scan
     data = list()
     
+    #for folder, folder file
     for root, dirs, files in walk:
         #collect the full path
         fullpath = os.path.join(os.path.abspath(root))
+        #for each file in the directory
         for f in files:
-            #encode and decode which removes any ascii characters
-            f = f.encode('ascii', 'ignore').decode('ascii')
-            fullpath = fullpath.encode('ascii', 'ignore').decode('ascii')
-            #append results into the data list
-            data.append((f, fullpath))
+            #gdb files cannot be accessed by os stat and therefore cannot extract metadata 
+            if 'gdb' not in fullpath:
+                #get last modified date of file, returns unix epoch time
+                lstmod = os.path.getmtime(os.path.join(fullpath,f))
+                #convert into readable dates
+                lstmod_r = datetime.datetime.utcfromtimestamp(lstmod).strftime('%Y-%m-%dT%H:%M:%SZ')
+                #get creation time of file
+                creation = os.path.getctime(os.path.join(fullpath,f))
+                #convert into readable dates
+                creation_r = datetime.datetime.utcfromtimestamp(creation).strftime('%Y-%m-%dT%H:%M:%SZ')
+                #encode and decode which removes any ascii characters for the f names
+                f_encode = f.encode('ascii', 'ignore').decode('ascii')
+                fullpath_encode = fullpath.encode('ascii', 'ignore').decode('ascii')
+                #append results into the data list
+                data.append((f_encode, fullpath_encode, lstmod_r,creation_r))
+            #for gdb files only pull the file name and file path
+            else:
+                #encode file name
+                f_encode = f.encode('ascii', 'ignore').decode('ascii')
+                #encode full path
+                fullpath_encode = fullpath.encode('ascii', 'ignore').decode('ascii')
+                #append results into the data list
+                data.append((f_encode, fullpath_encode))
     #set the pd.dataframe structure
-    df1 = pd.DataFrame(data, columns=['filename', 'fullpath']) 
+    df1 = pd.DataFrame(data, columns=['filename', 'fullpath','last_modified','creation_time']) 
     writer = pd.ExcelWriter(outputfile)
     #dump into excel
     df1.to_excel(writer, sheet_name='Sheet1')   
+    #save the excel
     writer.save()
 
-#then in use you can set something like this, creates new xls if one doesnt exist
-crawl(r'C:\dan',r'C:\dan\test.xls')
+#then in use you can set something like this which will create a new xls if one doesnt exist
+crawl(r'W:\daniel.scott\arcgis',r'W:\daniel.scott\test.xls') 
