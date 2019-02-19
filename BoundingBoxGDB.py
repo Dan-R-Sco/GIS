@@ -19,8 +19,11 @@ file_dir_field = "RasterPath"
 
 for raster in rasters:
     name = "Bounding_" + raster
+    #either define fc to append to i.e. r'default.gdb\boundingfc or create new fc
     fc = arcpy.CreateFeatureclass_management(out,name,"POLYGON")
+    #create fields to write file name into
     arcpy.AddField_management(fc,file_name_field, "String","","",250)
+    #create fields to write location into
     arcpy.AddField_management(fc,file_dir_field, "String","","",250)    
     r = arcpy.Raster(raster)
     point = arcpy.Point()
