@@ -1,0 +1,60 @@
+##
+## Taken from https://gis.stackexchange.com/questions/116319/plotting-elevation-maps-and-shaded-relief-images-from-latitude-longitude-and-e
+##After you have the points in 3D you interpolate the data with various methods/algorithms to create a grid/surface (with matplotlib, NumPy, SciPy, osgeo:GDAL, Mayavi and others)
+##you can save the resulting file with osgeo:GDAL, create Shaded Relief Map and ... (look at Python GDAL/OGR Cookbook, Shaded Relief Map in Python, or Shaded relief images using GDAL python as John Barça says, for example)
+
+
+import numpy as np
+import matplotlib.mlab as ml
+from osgeo import gdal
+from osgeo import osr
+import fiona
+# read a shapefile with Fiona
+shape = fiona.open('/Users/Shared/Dropbox/rs3D/rs3D.shp')
+x,y = zip(*[pt['geometry']['coordinates']  for pt in shape])
+z = [pr['properties'][u'elev'] for i in shape]
+# transform to numpy arrays
+x = np.array(x)
+y = np.array(y)
+z = np.array(z)
+
+#generate grid to interpolate data
+xi = np.linspace(min(x), max(x))
+yi = np.linspace(min(y), max(y))
+X, Y = np.meshgrid(xi, yi)
+
+#Interpolate the values of z for all points in the rectangular grid with matplotlib griddata
+Z = ml.griddata(x, y, z, xi, yi)
+
+#plot 3d with matplotlib
+from mpl_toolkits.mplot3d.axes3d import *
+import matplotlib.pyplot as plt
+from matplotlib import cm
+fig = plt.figure()
+ax = Axes3D(fig)
+ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.jet,linewidth=1, antialiased=True)
+plt.show()
+
+#plot in 3d with visvis
+import visvis
+f = visvis.gca()
+m = visvis.grid(xi,yi,Z) 
+f.daspect = 1,1,10 # z x 10
+# draped colors
+m = visvis.surf(xi,yi,Z)
+m.colormap = visvis.CM_JET
+
+#save to geotiff file
+nrows,ncols = np.shape(Z) 
+xres = (xmax-xmin)/ncols
+yres = (ymax-ymin)/nrows
+geotransform=(xmin,xres,0,ymin,0, yres) 
+driver = gdal.GetDriverByName("GTiff")
+ds = driver.Create('output.tif', nrows,ncols, 1, gdal.GDT_Float32)
+ds.SetGeoTransform(geotransform)
+#Establish its coordinate
+srs = osr.SpatialReference()    
+srs.ImportFromEPSG(your EPSG code) 
+ds.SetProjection( srs.ExportToWkt() )
+ds.GetRasterBand(1).WriteArray(Z)
+ds = None
