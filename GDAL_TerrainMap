@@ -1,0 +1,122 @@
+##
+## guide found https://plot.ly/~empet/14067/plotting-terrain-data-read-via-gdal/#/
+##
+## data from http://vterrain.org/ and http://nationalmap.gov/
+
+import numpy as np
+import gdal
+
+geo = gdal.Open('maui_1k.bt')#read a bt format file (bt=binary terrain)
+maui = geo.ReadAsArray()
+print maui.shape
+I, J = np.where(maui>0)
+maui = maui[min(I):max(I)+1, min(J):max(J)+1]
+maui[maui<1.e-10] = np.nan
+print maui.shape
+
+pl_BrBG=[[0.0, 'rgb(0, 60, 48)'],# colorscale
+ [0.05, 'rgb(0, 79, 69)'],
+ [0.1, 'rgb(0, 101, 93)'],
+ [0.15, 'rgb(26, 126, 118)'],
+ [0.2, 'rgb(53, 151, 143)'],
+ [0.25, 'rgb(91, 178, 168)'],
+ [0.3, 'rgb(126, 203, 192)'],
+ [0.35, 'rgb(162, 219, 210)'],
+ [0.4, 'rgb(199, 234, 229)'],
+ [0.45, 'rgb(222, 239, 237)'],
+ [0.5, 'rgb(245, 244, 244)'],
+ [0.55, 'rgb(245, 238, 220)'],
+ [0.6, 'rgb(246, 232, 195)'],
+ [0.65, 'rgb(234, 212, 159)'],
+ [0.7, 'rgb(222, 192, 123)'],
+ [0.75, 'rgb(206, 159, 82)'],
+ [0.8, 'rgb(191, 129, 45)'],
+ [0.85, 'rgb(165, 104, 27)'],
+ [0.9, 'rgb(138, 80, 9)'],
+ [0.95, 'rgb(110, 63, 7)'],
+ [1.0, 'rgb(84, 48, 5)']]
+ 
+ 
+import plotly.plotly as py
+from plotly.graph_objs import *
+tr=Heatmap(z=maui, 
+           colorscale=pl_BrBG, 
+           colorbar=dict(thickness=20,  
+                         ticklen=3,
+                         title='meters',
+                         titlefont=dict(size=11)
+                         )
+                      )
+#add source to text at bottom of plotly
+anno_text="Data source: <a href='http://vterrain.org/BT/'> [1] </a>"
+
+
+axis=dict(showgrid=False,
+          showline=False,
+          showticklabels=False,
+          ticks='',
+          zeroline=False)
+          
+#add title and formatting details
+layout = Layout(title='Maui Island',
+                font=dict(family='Balto'),
+                width=600,
+                height=600,
+                showlegend=False,
+                xaxis=XAxis(axis), 
+                yaxis=YAxis(axis, autorange='reversed'), 
+                annotations = Annotations([ Annotation(showarrow=False, 
+                                                       text=anno_text,  
+                                                       xref='paper',     
+                                                       yref='paper',     
+                                                       x=0,  
+                                                       y=-0.1,  
+                                                       xanchor='left',   
+                                                       yanchor='bottom',  
+                                                       font=Font( size=11 )
+                                                       )
+                                          ]) 
+              )
+fig=Figure(data=Data([tr]), layout =layout)
+py.sign_in('empet', '')
+py.iplot(fig, filename='Maui-island')
+
+###############################
+## For 3D interactive model ###
+###############################
+
+
+surf=Surface(z=np.flipud(maui), colorscale=pl_BrBG, colorbar=dict(
+                                     thickness=20,  
+                                     ticklen=3,
+                                     title='meters',
+                                     titlefont=dict(size=11)
+                                     ))
+                                     
+noaxis=dict( showbackground=False,
+            showgrid=False,
+            showline=False,
+            showticklabels=False,
+            ticks='',
+            title='',
+            zeroline=False)
+
+layout1 = Layout(
+         title='Maui island',
+         width=800,
+         height=800,
+         showlegend=False,
+         scene=Scene(xaxis=XAxis(noaxis),
+                     yaxis=YAxis(noaxis), 
+                     zaxis=ZAxis(noaxis), 
+                     aspectratio=dict(x=1,
+                                      y=1,
+                                      z=0.15
+                                     ),
+                    )
+        )
+        
+fig1=Figure(data=Data([surf]), layout =layout1)
+py.iplot(fig1, filename='Maui-island1')
+                      
+                      
