@@ -1,0 +1,34 @@
+##TEST
+
+import fiona
+
+#open up one of the plots
+vector_shape = r"C:\Users\dr_sc\Desktop\Space_AG\adoval4-space-ag-data-analyst-challenge-37385be5a0c7\Vectors/1.shp"
+with fiona.open(vector_shape, "r") as shapefile:
+    shapes = [feature["geometry"] for feature in shapefile]
+
+raster = r"C:\Users\dr_sc\Desktop\Space_AG\adoval4-space-ag-data-analyst-challenge-37385be5a0c7\rasters\ff13ff2a71e3a60696af15124e9c6ff5\response.tiff"
+with rasterio.open(raster) as src:
+    out_image, out_transform = rasterio.mask.mask(src, shapes,  crop=True, all_touched=True)
+    out_meta = src.meta
+
+out_meta.update({"driver": "GTiff",
+                 "height": out_image.shape[1],
+                 "width": out_image.shape[2],
+                 "transform": out_transform})
+
+time = get_time(raster)
+
+#writes the raster clipped out to this directory
+rdir = os.path.dirname(raster)
+rname = "{}/{}_plot{}.tiff".format(rdir,time,'1')
+with rasterio.open(rname, "w", **out_meta) as dest:
+    dest.write(out_image)
+
+#mean with zeros
+out_image.mean()
+
+#mean without zeros
+img_mean = out_image[out_image.nonzero()].mean()
+
+print(img_mean)
